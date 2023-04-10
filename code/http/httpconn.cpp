@@ -114,7 +114,8 @@ bool HttpConn::process() {
 
     /* 文件 */
     if(response_.FileLen() > 0  && response_.File()) {
-        iov_[1].iov_base = response_.File();
+        iov_[1].iov_base = (void *)(response_.File());
+        LOG_INFO("[FILE]: %s", response_.File());
         iov_[1].iov_len = response_.FileLen();
         iovCnt_ = 2;
     }

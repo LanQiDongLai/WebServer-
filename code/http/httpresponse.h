@@ -14,6 +14,7 @@
 
 #include "../buffer/buffer.h"
 #include "../log/log.h"
+#include "httprouter.h"
 
 class HttpResponse {
 public:
@@ -23,7 +24,7 @@ public:
     void Init(const std::string& srcDir, std::string& path, bool isKeepAlive = false, int code = -1);
     void MakeResponse(Buffer& buff);
     void UnmapFile();
-    char* File();
+    const char* File();
     size_t FileLen() const;
     void ErrorContent(Buffer& buff, std::string message);
     int Code() const { return code_; }
@@ -36,6 +37,8 @@ private:
     void ErrorHtml_();
     std::string GetFileType_();
 
+    void addRouter();
+
     int code_;
     bool isKeepAlive_;
 
@@ -44,6 +47,13 @@ private:
     
     char* mmFile_; 
     struct stat mmFileStat_;
+
+    httprouter::node router_;
+
+    bool isStaticFile_;
+    char *dynamichtml_;
+    std::string dynamichtml_str_;
+    std::size_t dynamichtml_len_;
 
     static const std::unordered_map<std::string, std::string> SUFFIX_TYPE;
     static const std::unordered_map<int, std::string> CODE_STATUS;
